@@ -1,0 +1,59 @@
+{
+    "name": "nssf",
+    "description": "not so simple form",
+    "license":     "MIT",
+    "authors": [
+        {
+            "name":     "Florian Klein",
+            "homepage": "http://knplabs.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "2.1.*",
+        "doctrine/mongodb-odm-bundle": "*",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "twig/extensions": "1.0.*",
+        "symfony/assetic-bundle": "2.1.*",
+        "symfony/swiftmailer-bundle": "2.1.*",
+        "symfony/monolog-bundle": "2.1.*",
+        "sensio/distribution-bundle": "2.1.*",
+        "mopa/bootstrap-bundle": "dev-master",
+        "knplabs/rad-bundle": "dev-develop"
+    },
+    "require-dev": {
+        "behat/behat": "2.4.*",
+        "behat/symfony2-extension": "*",
+        "behat/mink-extension": "*",
+        "behat/mink-browserkit-driver": "*",
+        "phpspec/phpspec2": "dev-develop"
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "": "src/", "Context": "features/" }
+    },
+     "scripts": {
+        "post-install-cmd": [
+            "Knp\\RadBundle\\Composer\\ScriptHandler::installParametersFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-update-cmd": [
+            "Knp\\RadBundle\\Composer\\ScriptHandler::installParametersFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ]
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "symfony-assets-install": "symlink"
+    }
+}
