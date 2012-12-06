@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+list
+<a href="{{ path('app_form_new') }}">new</a>
+
+{% for form in forms %}
+
+<a href="{{ path('app_form_show', {'id': form.id }) }}">{{ form.name }}</a>
+
+{% endfor %}
+{% endblock body %}

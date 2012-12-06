@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+new form
+
+<form action="{{ path('app_form_update', {'id': formDocument.id}) }}" method="POST">
+    <input type="hidden" name="_method" value="PUT" />
+    {{ form_widget(form) }}
+    <input type="submit" value="save" />
+</form>
+
+{% endblock %}

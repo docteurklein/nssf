@@ -1,5 +1,5 @@
 {
-    "hash": "ed8872c410f4e149cbdb32c99134a75e",
+    "hash": "4acf295daccba18e0f57ff586e7da79d",
     "packages": [
         {
             "name": "doctrine/common",
@@ -546,6 +546,79 @@
                 "highlight"
             ],
             "time": "2012-11-17 22:31:58"
+        },
+        {
+            "name": "knplabs/controller-behaviors",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/KnpLabs/ControllerBehaviors.git",
+                "reference": "fe613945876ce9d580414760ada73e58af5a973c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/KnpLabs/ControllerBehaviors/archive/fe613945876ce9d580414760ada73e58af5a973c.zip",
+                "reference": "fe613945876ce9d580414760ada73e58af5a973c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "symfony/http-foundation": "2.1.*"
+            },
+            "require-dev": {
+                "knplabs/knp-components": "dev-master",
+                "doctrine/doctrine-bundle": "*",
+                "doctrine/orm": "*",
+                "doctrine/mongodb-odm-bundle": "*",
+                "propel/propel1": "dev-master",
+                "symfony/form": "*",
+                "symfony/validator": "*",
+                "symfony/framework-bundle": "2.1.*",
+                "phpspec/phpspec2": "1.0.*"
+            },
+            "suggest": {
+                "knplabs/knp-paginator-bundle": "*",
+                "doctrine/doctrine-bundle": "*",
+                "doctrine/mongodb-odm-bundle": "*",
+                "propel/propel-bundle": "*"
+            },
+            "time": "2012-10-23 08:38:04",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "": "src/",
+                    "example": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Knplabs",
+                    "homepage": "http://knplabs.com"
+                },
+                {
+                    "name": "Konstantin Kudryashov",
+                    "email": "ever.zet@gmail.com",
+                    "homepage": "http://everzet.com"
+                },
+                {
+                    "name": "Klein Florian",
+                    "email": "florian.klein@free.fr",
+                    "homepage": "https://github.com/docteurklein"
+                }
+            ],
+            "description": "Trait based Symfony2 controllers",
+            "homepage": "http://knplabs.com",
+            "keywords": [
+                "Symfony2",
+                "behaviors",
+                "doctrine2",
+                "crud"
+            ]
         },
         {
             "name": "knplabs/rad-bundle",
@@ -1780,6 +1853,7 @@
     "stability-flags": {
         "doctrine/doctrine-fixtures-bundle": 20,
         "mopa/bootstrap-bundle": 20,
+        "knplabs/controller-behaviors": 20,
         "knplabs/rad-bundle": 20,
         "phpspec/phpspec2": 20
     }
