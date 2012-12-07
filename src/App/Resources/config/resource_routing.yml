@@ -5,31 +5,31 @@ App:Form:
         show:
             defaults:
                 _resources:
-                    formDocument: { service: odm.form_repository, method: 'find', arguments: [{ name: id }] }
+                    formDocument: { service: mongodb.form_repository, method: 'find', arguments: [{ name: id }] }
         edit:
             defaults:
                 _resources:
-                    formDocument: { service: odm.form_repository, method: 'find', arguments: [{ name: id }] }
+                    formDocument: { service: mongodb.form_repository, method: 'find', arguments: [{ name: id }] }
                     form: { service: knp_rad.form.manager, method: 'createObjectForm', arguments: [{ name: formDocument }] }
         update:
             defaults:
                 _resources:
-                    formDocument: { service: odm.form_repository, method: 'find', arguments: [{ name: id }] }
+                    formDocument: { service: mongodb.form_repository, method: 'find', arguments: [{ name: id }] }
                     form: { service: knp_rad.form.manager, method: 'createBoundObjectForm', arguments: [{ name: formDocument }] }
 
     collections:
         index:
             defaults:
                 _resources:
-                    forms: { service: odm.form_repository, method: 'findAll' }
+                    forms: { service: mongodb.form_repository, method: 'findAll' }
         new:
             defaults:
                 _resources:
-                    formDocument: { service: odm.form_repository, method: 'newInstance' }
+                    formDocument: { service: mongodb.form_repository, method: 'newInstance' }
                     form: { service: knp_rad.form.manager, method: 'createObjectForm', arguments: [{ name: formDocument }] }
         create:
             defaults:
                 _resources:
-                    formDocument: { service: odm.form_repository, method: 'newInstance' }
+                    formDocument: { service: mongodb.form_repository, method: 'newInstance' }
                     form: { service: knp_rad.form.manager, method: 'createBoundObjectForm', arguments: [{ name: formDocument }] }
 

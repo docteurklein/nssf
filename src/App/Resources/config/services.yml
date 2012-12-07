@@ -1,0 +1,17 @@
+
+services:
+    mongodb.form_repository:
+        class: App\Mongo\Repository\FormRepository
+        arguments:
+            - @mongo_db
+
+    mongo_client:
+        class: MongoClient
+        arguments:
+            - "mongodb://localhost:27017"
+
+    mongo_db:
+        class: MongoDB
+        factory_service: mongo_client
+        factory_method:  selectDB
+        arguments: ["nssf"]

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Knp\RadBundle\Controller\Controller as BaseController;
 use Symfony\Component\Form\Form;
-use App\Document;
+use App\Mongo;
 
 class FormController extends BaseController
 {
@@ -15,8 +15,7 @@ class FormController extends BaseController
         ];
     }
 
-
-    public function showAction(Document\Form $formDocument)
+    public function showAction(\StdClass $formDocument)
     {
         return [
             'formDocument' => $formDocument
@@ -42,8 +41,7 @@ class FormController extends BaseController
     {
         if ($form->isValid()) {
 
-            $this->get('doctrine_mongodb.odm.default_document_manager')->persist($form->getData());
-            $this->get('doctrine_mongodb.odm.default_document_manager')->flush();
+            $this->get('mongodb.form_repository')->save($form->getData());
 
             return $this->redirectToRoute('app_form_index');
         }
