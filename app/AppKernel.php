@@ -14,9 +14,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-            //new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
-            //new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-            //new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new Knp\RadBundle\KnpRadBundle(),
             new App\App(),
         );

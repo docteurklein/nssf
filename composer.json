@@ -11,15 +11,11 @@
     "require": {
         "php": ">=5.4",
         "symfony/symfony": "2.1.*",
-        "doctrine/mongodb-odm-bundle": "*",
-        "doctrine/doctrine-fixtures-bundle": "dev-master",
         "twig/extensions": "1.0.*",
         "symfony/assetic-bundle": "2.1.*",
         "symfony/swiftmailer-bundle": "2.1.*",
         "symfony/monolog-bundle": "2.1.*",
         "sensio/distribution-bundle": "2.1.*",
-        "mopa/bootstrap-bundle": "dev-master",
-        "knplabs/controller-behaviors": "dev-master",
         "knplabs/rad-bundle": "dev-develop"
     },
     "require-dev": {

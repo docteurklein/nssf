@@ -5,7 +5,7 @@ namespace App\Mongo\Repository;
 use App\Mongo\Form;
 use \MongoDB;
 
-class FormRepository
+class FormRepository extends MongoRepository
 {
     private $mongo;
 
@@ -22,7 +22,8 @@ class FormRepository
     public function find($id)
     {
         $object = (object) $this->mongo->findOne(['_id' => new \MongoId($id)]);
-        $object->_id = (string) $object->_id;
+        $object = $this->transform($object);
+        die(var_dump('final', $object, $this->reverseTransform($object)));
 
         return $object;
     }
@@ -32,11 +33,11 @@ class FormRepository
         return $this->mongo->find();
     }
 
-    public function save(\stdClass $form)
+    public function save(\stdClass $object)
     {
-        $form->_id = new \MongoId($form->_id);
+        $this->reverseTransform($object);
 
-        return $this->mongo->save($form);
+        return $this->mongo->save($object);
     }
 }
 
