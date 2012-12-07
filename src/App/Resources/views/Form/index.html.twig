@@ -7,7 +7,7 @@ list
 
 {% for form in forms %}
 
-<a href="{{ path('app_form_show', {'id': form.id }) }}">{{ form.name }}</a>
+<a href="{{ path('app_form_show', {'id': form._id }) }}">{{ form.name }}</a>
 
 {% endfor %}
 {% endblock body %}

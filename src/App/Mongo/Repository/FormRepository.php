@@ -21,7 +21,7 @@ class FormRepository
 
     public function find($id)
     {
-        $object = (object) $this->mongo->findOne(['id' => $id]);
+        $object = (object) $this->mongo->findOne(['_id' => new \MongoId($id)]);
         $object->_id = (string) $object->_id;
 
         return $object;
