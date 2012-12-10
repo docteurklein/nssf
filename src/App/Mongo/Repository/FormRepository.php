@@ -21,9 +21,12 @@ class FormRepository extends MongoRepository
 
     public function find($id)
     {
-        $object = (object) $this->mongo->findOne(['_id' => new \MongoId($id)]);
+        $object = $this->mongo->findOne(['_id' => new \MongoId($id)]);
         $object = $this->transform($object);
-        die(var_dump('final', $object, $this->reverseTransform($object)));
+        (var_dump('final', $object));
+        (var_dump('finalreverse ', $this->reverseTransform($object)));
+
+        var_dump($object);
 
         return $object;
     }
@@ -33,7 +36,7 @@ class FormRepository extends MongoRepository
         return $this->mongo->find();
     }
 
-    public function save(\stdClass $object)
+    public function save($object)
     {
         $this->reverseTransform($object);
 

@@ -10,42 +10,20 @@ class MongoRepository
 {
     public function transform($object)
     {
-        if (is_object($object)) {
-            $object = $this->transformObject($object);
-        }
-
-        if (is_array($object)) {
-            $object = $this->transformArray($object);
-        }
-
         if ($object instanceof MongoId) {
-            $object = (string) $object;
+            return (string) $object;
         }
 
         if ($object instanceof MongoDate) {
-            $object = $this->toDateTime($object);
-        }
-
-        var_dump('before return', $object);
-        return $object;
-    }
-
-    public function reverseTransform($object)
-    {
-        if (isset($object->_id) && !$object->_id instanceof MongoId) {
-            $object->_id = new MongoId($object->_id);
+            return $this->toDateTime($object);
         }
 
         if (is_object($object)) {
-            $object = $this->reverseTransformObject($object);
+            return $this->transformObject($object);
         }
 
         if (is_array($object)) {
-            $object = $this->reverseTransformArray($object);
-        }
-
-        if ($object instanceof DateTime) {
-            $object = $this->toMongoDate($object);
+            return $this->transformArray($object);
         }
 
         return $object;
@@ -56,9 +34,7 @@ class MongoRepository
         $refl = new \ReflectionObject($object);
         foreach ($refl->getProperties() as $property) {
 
-            $property->setAccessible(true);
             $value = $property->getValue($object);
-
             $property->setValue($object, $this->transform($value));
         }
 
@@ -67,13 +43,44 @@ class MongoRepository
 
     private function transformArray(array $object)
     {
+        foreach ($object as $key => $value) {
+            $object[$key] = $this->transform($value);
+        }
+
         if ($this->isHash($object)) {
             return (object) $object;
         }
 
-        foreach ($object as $key => $value) {
-            $object[$key] = $this->transform($value);
+        return $object;
+    }
+
+    public function reverseTransform($object)
+    {
+        if (is_object($object)) {
+            return $this->doReverseTranform(clone $object);
         }
+
+        return $this->doReverseTranform($object);
+    }
+
+    private function doReverseTranform($object)
+    {
+        if (isset($object->_id) && !$object->_id instanceof MongoId) {
+            $object->_id = new MongoId($object->_id);
+        }
+
+        if ($object instanceof DateTime) {
+            return $this->toMongoDate($object);
+        }
+
+        if (is_object($object)) {
+            return $this->reverseTransformObject($object);
+        }
+
+        if (is_array($object)) {
+            return $this->reverseTransformArray($object);
+        }
+
 
         return $object;
     }
@@ -86,7 +93,7 @@ class MongoRepository
             $property->setAccessible(true);
             $value = $property->getValue($object);
 
-            $property->setValue($object, $this->reverseTransform($value));
+            $property->setValue($object, $this->doReverseTranform($value));
         }
 
         return $object;
@@ -94,12 +101,8 @@ class MongoRepository
 
     private function reverseTransformArray(array $object)
     {
-        if (!$this->isHash($object)) {
-            return (array) $object;
-        }
-
         foreach ($object as $key => $value) {
-            $object[$key] = $this->reverseTransform($value);
+            $object[$key] = $this->doReverseTranform($value);
         }
 
         return $object;
