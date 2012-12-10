@@ -5,10 +5,16 @@ namespace App\Mongo\Repository;
 use \MongoId;
 use \MongoDate;
 use \DateTime;
+use \ArrayIterator;
 
 class MongoRepository
 {
     public function transform($object)
+    {
+        return $this->doTransform((object) $object);
+    }
+
+    private function doTransform($object)
     {
         if ($object instanceof MongoId) {
             return (string) $object;
@@ -34,8 +40,9 @@ class MongoRepository
         $refl = new \ReflectionObject($object);
         foreach ($refl->getProperties() as $property) {
 
+            $property->setAccessible(true);
             $value = $property->getValue($object);
-            $property->setValue($object, $this->transform($value));
+            $property->setValue($object, $this->doTransform($value));
         }
 
         return $object;
@@ -44,11 +51,11 @@ class MongoRepository
     private function transformArray(array $object)
     {
         foreach ($object as $key => $value) {
-            $object[$key] = $this->transform($value);
+            $object[$key] = $this->doTransform($value);
         }
 
         if ($this->isHash($object)) {
-            return (object) $object;
+            return $this->toArrayIterator($object);
         }
 
         return $object;
@@ -66,7 +73,7 @@ class MongoRepository
     private function doReverseTranform($object)
     {
         if (isset($object->_id) && !$object->_id instanceof MongoId) {
-            $object->_id = new MongoId($object->_id);
+            $object->_id = $this->toMongoId($object->_id);
         }
 
         if ($object instanceof DateTime) {
@@ -113,6 +120,11 @@ class MongoRepository
         return array_keys($array) !== range(0, count($array) - 1);
     }
 
+    private function toMongoId($id)
+    {
+        return new MongoId($id);
+    }
+
     private function toMongoDate(DateTime $date)
     {
         return new MongoDate($date->format('U.u'));
@@ -124,6 +136,11 @@ class MongoRepository
         $dateTime->setTimestamp($date->sec);
 
         return $dateTime;
+    }
+
+    public function toArrayIterator(array $object)
+    {
+        return new ArrayIterator($object);
     }
 }
 
