@@ -2,7 +2,7 @@
 
 namespace App\Mongo;
 
-class Form extends \stdClass
+class Form
 {
     public $name;
 }

@@ -3,6 +3,7 @@
 namespace App\Mongo\Repository;
 
 use \MongoDB;
+use \MongoCursor;
 use \MongoId;
 use \MongoDate;
 use \DateTime;
@@ -10,7 +11,7 @@ use \ArrayIterator;
 
 trait MongoRepository
 {
-    private $mongo;
+    protected $mongo;
 
     public function __construct(MongoDB $mongo)
     {
@@ -23,10 +24,53 @@ trait MongoRepository
 
     public function transform($object)
     {
-        return $this->doTransform((object) $object);
+        $destination = $this->newInstance();
+        $this->copy((object) $object, $destination);
+
+        return $this->doTransform($destination);
     }
 
-    private function doTransform($object)
+    public function find($id)
+    {
+        $object = $this->mongo->findOne(['_id' => new \MongoId($id)]);
+        $object = $this->transform($object);
+
+        return $object;
+    }
+
+    public function findAll()
+    {
+        return $this->hydrateCursor($this->mongo->find());
+    }
+
+    public function save($object)
+    {
+        $object = $this->reverseTransform($object);
+
+        return $this->mongo->save($object);
+    }
+
+    protected function hydrateCursor(MongoCursor $cursor)
+    {
+        $results = [];
+        foreach ($cursor as $document) {
+            $results[] = $this->transform($document);
+        }
+
+        return $this->toArrayIterator($results);
+    }
+
+    protected function copy($source, $destination)
+    {
+        $refl = new \ReflectionObject($source);
+
+        foreach ($refl->getProperties() as $property) {
+            $property->setAccessible(true);
+            $property->setValue($destination, $property->getValue($source));
+        }
+    }
+
+    protected function doTransform($object)
     {
         if ($object instanceof MongoId) {
             return (string) $object;
@@ -47,7 +91,7 @@ trait MongoRepository
         return $object;
     }
 
-    private function transformObject($object)
+    protected function transformObject($object)
     {
         $refl = new \ReflectionObject($object);
         foreach ($refl->getProperties() as $property) {
@@ -60,7 +104,7 @@ trait MongoRepository
         return $object;
     }
 
-    private function transformArray(array $object)
+    protected function transformArray(array $object)
     {
         foreach ($object as $key => $value) {
             $object[$key] = $this->doTransform($value);
@@ -82,7 +126,7 @@ trait MongoRepository
         return $this->doReverseTranform($object);
     }
 
-    private function doReverseTranform($object)
+    protected function doReverseTranform($object)
     {
         if (isset($object->_id) && !$object->_id instanceof MongoId) {
             $object->_id = $this->toMongoId($object->_id);
@@ -100,11 +144,10 @@ trait MongoRepository
             return $this->reverseTransformArray($object);
         }
 
-
         return $object;
     }
 
-    private function reverseTransformObject($object)
+    protected function reverseTransformObject($object)
     {
         $refl = new \ReflectionObject($object);
         foreach ($refl->getProperties() as $property) {
@@ -118,7 +161,7 @@ trait MongoRepository
         return $object;
     }
 
-    private function reverseTransformArray(array $object)
+    protected function reverseTransformArray(array $object)
     {
         foreach ($object as $key => $value) {
             $object[$key] = $this->doReverseTranform($value);
@@ -127,22 +170,22 @@ trait MongoRepository
         return $object;
     }
 
-    private function isHash(array $array)
+    protected function isHash(array $array)
     {
         return array_keys($array) !== range(0, count($array) - 1);
     }
 
-    private function toMongoId($id)
+    protected function toMongoId($id)
     {
         return new MongoId($id);
     }
 
-    private function toMongoDate(DateTime $date)
+    protected function toMongoDate(DateTime $date)
     {
         return new MongoDate($date->format('U.u'));
     }
 
-    private function toDateTime(MongoDate $date)
+    protected function toDateTime(MongoDate $date)
     {
         $dateTime = new DateTime;
         $dateTime->setTimestamp($date->sec);
@@ -150,29 +193,9 @@ trait MongoRepository
         return $dateTime;
     }
 
-    public function toArrayIterator(array $object)
+    protected function toArrayIterator(array $object)
     {
         return new ArrayIterator($object);
-    }
-
-    public function find($id)
-    {
-        $object = $this->mongo->findOne(['_id' => new \MongoId($id)]);
-        $object = $this->transform($object);
-
-        return $object;
-    }
-
-    public function findAll()
-    {
-        return $this->mongo->find();
-    }
-
-    public function save($object)
-    {
-        $object = $this->reverseTransform($object);
-
-        return $this->mongo->save($object);
     }
 }
 

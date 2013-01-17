@@ -5,6 +5,7 @@ namespace App\Controller;
 use Knp\RadBundle\Controller\Controller as BaseController;
 use Symfony\Component\Form\Form;
 use App\Mongo;
+use App\Mongo\Form as FormDocument;
 
 class FormController extends BaseController
 {
@@ -15,7 +16,7 @@ class FormController extends BaseController
         ];
     }
 
-    public function showAction(\StdClass $formDocument)
+    public function showAction(FormDocument $formDocument)
     {
         return [
             'formDocument' => $formDocument
