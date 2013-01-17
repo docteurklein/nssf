@@ -2,13 +2,23 @@
 
 namespace App\Mongo\Repository;
 
+use \MongoDB;
 use \MongoId;
 use \MongoDate;
 use \DateTime;
 use \ArrayIterator;
 
-class MongoRepository
+trait MongoRepository
 {
+    private $mongo;
+
+    public function __construct(MongoDB $mongo)
+    {
+        $this->mongo = $mongo->selectCollection('form');
+    }
+
+    abstract public function newInstance();
+
     public function transform($object)
     {
         return $this->doTransform((object) $object);
@@ -141,6 +151,26 @@ class MongoRepository
     public function toArrayIterator(array $object)
     {
         return new ArrayIterator($object);
+    }
+
+    public function find($id)
+    {
+        $object = $this->mongo->findOne(['_id' => new \MongoId($id)]);
+        $object = $this->transform($object);
+
+        return $object;
+    }
+
+    public function findAll()
+    {
+        return $this->mongo->find();
+    }
+
+    public function save($object)
+    {
+        $object = $this->reverseTransform($object);
+
+        return $this->mongo->save($object);
     }
 }
 

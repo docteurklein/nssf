@@ -3,40 +3,14 @@
 namespace App\Mongo\Repository;
 
 use App\Mongo\Form;
-use \MongoDB;
 
-class FormRepository extends MongoRepository
+class FormRepository
 {
-    private $mongo;
-
-    public function __construct(MongoDB $mongo)
-    {
-        $this->mongo = $mongo->selectCollection('form');
-    }
+    use MongoRepository;
 
     public function newInstance()
     {
         return new Form;
-    }
-
-    public function find($id)
-    {
-        $object = $this->mongo->findOne(['_id' => new \MongoId($id)]);
-        $object = $this->transform($object);
-
-        return $object;
-    }
-
-    public function findAll()
-    {
-        return $this->mongo->find();
-    }
-
-    public function save($object)
-    {
-        $object = $this->reverseTransform($object);
-
-        return $this->mongo->save($object);
     }
 }
 
