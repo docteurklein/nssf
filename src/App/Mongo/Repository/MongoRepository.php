@@ -32,7 +32,7 @@ trait MongoRepository
 
     public function find($id)
     {
-        $object = $this->mongo->findOne(['_id' => new \MongoId($id)]);
+        $object = $this->mongo->findOne(['_id' => $this->toMongoId($id)]);
         $object = $this->transform($object);
 
         return $object;
