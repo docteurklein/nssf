@@ -14,10 +14,12 @@ trait MongoRepository
 
     public function __construct(MongoDB $mongo)
     {
-        $this->mongo = $mongo->selectCollection('form');
+        $this->mongo = $mongo->selectCollection($this->getCollectionName());
     }
 
     abstract public function newInstance();
+
+    abstract public function getCollectionName();
 
     public function transform($object)
     {

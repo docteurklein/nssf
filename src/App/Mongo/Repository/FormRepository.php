@@ -12,5 +12,10 @@ class FormRepository
     {
         return new Form;
     }
+
+    public function getCollectionName()
+    {
+        return 'form';
+    }
 }
 
